@@ -16,11 +16,11 @@ kernelspec:
 For most models we use sampling MCMC algorithms like Metropolis or NUTS. In PyMC3 we got used to store traces of MCMC samples and then do analysis using them. There is a similar concept for the variational inference submodule in PyMC3: *Empirical*. This type of approximation stores particles for the SVGD sampler. There is no difference between independent SVGD particles and MCMC samples. *Empirical* acts as a bridge between MCMC sampling output and full-fledged VI utils like `apply_replacements` or `sample_node`. For the interface description, see [variational_api_quickstart](variational_api_quickstart.ipynb). Here we will just focus on `Emprical` and give an overview of specific things for the *Empirical* approximation
 
 ```{code-cell} ipython3
+import aesara
 import arviz as az
 import matplotlib.pyplot as plt
 import numpy as np
 import pymc as pm
-import aesara
 
 from pandas import DataFrame
 
