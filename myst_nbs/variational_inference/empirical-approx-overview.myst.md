@@ -4,11 +4,11 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.8
 kernelspec:
-  display_name: Python PyMC3 (Dev)
+  display_name: pymc
   language: python
-  name: pymc3-dev-py38
+  name: pymc
 ---
 
 # Empirical Approximation overview
@@ -19,19 +19,19 @@ For most models we use sampling MCMC algorithms like Metropolis or NUTS. In PyMC
 import arviz as az
 import matplotlib.pyplot as plt
 import numpy as np
-import pymc3 as pm
-import theano
+import pymc as pm
+import aesara
 
 from pandas import DataFrame
 
-print(f"Running on PyMC3 v{pm.__version__}")
+print(f"Running on PyMC v{pm.__version__}")
 ```
 
 ```{code-cell} ipython3
 %config InlineBackend.figure_format = 'retina'
 az.style.use("arviz-darkgrid")
 np.random.seed(42)
-pm.set_tt_rng(42)
+pm.set_at_rng(42)
 ```
 
 ## Multimodal density
@@ -43,8 +43,8 @@ mu = pm.floatX([-0.3, 0.5])
 sd = pm.floatX([0.1, 0.1])
 
 with pm.Model() as model:
-    x = pm.NormalMixture("x", w=w, mu=mu, sigma=sd, dtype=theano.config.floatX)
-    trace = pm.sample(50000)
+    x = pm.NormalMixture("x", w=w, mu=mu, sigma=sd)
+    trace = pm.sample(50000, return_inferencedata=False)
 ```
 
 ```{code-cell} ipython3
@@ -113,7 +113,7 @@ mu = pm.floatX([0.0, 0.0])
 cov = pm.floatX([[1, 0.5], [0.5, 1.0]])
 with pm.Model() as model:
     pm.MvNormal("x", mu=mu, cov=cov, shape=2)
-    trace = pm.sample(1000)
+    trace = pm.sample(1000, return_inferencedata=False)
 ```
 
 ```{code-cell} ipython3
@@ -126,17 +126,7 @@ az.plot_trace(approx.sample(10000));
 ```
 
 ```{code-cell} ipython3
-import seaborn as sns
-```
-
-```{code-cell} ipython3
-kdeViz_df = DataFrame(
-    data=approx.sample(1000)["x"], columns=["First Dimension", "Second Dimension"]
-)
-```
-
-```{code-cell} ipython3
-sns.kdeplot(data=kdeViz_df, x="First Dimension", y="Second Dimension")
+az.plot_pair(data=approx.sample(10000))
 plt.show()
 ```
 
