@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.8
+    jupytext_version: 1.13.7
 kernelspec:
   display_name: pymc
   language: python
@@ -27,14 +27,14 @@ Unlike Gaussian mixture models, (hierarchical) regression models have independen
 
 import os
 
+import aesara
+import aesara.tensor as at
 import arviz as az
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pymc as pm
 import seaborn as sns
-import aesara
-import aesara.tensor as at
 
 from scipy import stats
 
@@ -159,10 +159,12 @@ with pm.Model(coords=coords):
     # essentially, this is what init='advi' does
     step = pm.NUTS(scaling=approx.cov.eval(), is_cov=True)
     hierarchical_trace = pm.sample(
-        2000, step,
+        2000,
+        step,
         # sampling different initial values from the trace
-        initvals=list(approx.sample(return_inferencedata=False, size=4)[i] for i in range(4)), 
-        progressbar=True, return_inferencedata=True
+        initvals=list(approx.sample(return_inferencedata=False, size=4)[i] for i in range(4)),
+        progressbar=True,
+        return_inferencedata=True,
     )
 ```
 
