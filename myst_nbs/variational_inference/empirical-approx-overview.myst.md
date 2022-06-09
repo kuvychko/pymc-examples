@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: pymc
   language: python
@@ -44,11 +44,13 @@ sd = pm.floatX([0.1, 0.1])
 
 with pm.Model() as model:
     x = pm.NormalMixture("x", w=w, mu=mu, sigma=sd)
+    # Empirical approx does not support inference data
     trace = pm.sample(50000, return_inferencedata=False)
+    idata = pm.to_inference_data(trace)
 ```
 
 ```{code-cell} ipython3
-az.plot_trace(trace);
+az.plot_trace(idata);
 ```
 
 Great. First having a trace we can create `Empirical` approx
@@ -66,7 +68,7 @@ with model:
 approx
 ```
 
-This type of approximation has it's own underlying storage for samples that is `theano.shared` itself
+This type of approximation has it's own underlying storage for samples that is `aesara.shared` itself
 
 ```{code-cell} ipython3
 approx.histogram
@@ -114,6 +116,7 @@ cov = pm.floatX([[1, 0.5], [0.5, 1.0]])
 with pm.Model() as model:
     pm.MvNormal("x", mu=mu, cov=cov, shape=2)
     trace = pm.sample(1000, return_inferencedata=False)
+    idata = pm.to_inference_data(trace)
 ```
 
 ```{code-cell} ipython3
