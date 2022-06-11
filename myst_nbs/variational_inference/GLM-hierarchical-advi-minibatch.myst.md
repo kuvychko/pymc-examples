@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.13.7
+    jupytext_version: 1.13.8
 kernelspec:
   display_name: pymc
   language: python
@@ -14,7 +14,7 @@ kernelspec:
 # GLM: Mini-batch ADVI on hierarchical regression model
 
 :::{post} Sept 23, 2021
-:tags: generalized linear model, hierarchical model, pymc3.Minibatch, pymc3.Model, pymc3.NUTS, pymc3.Normal, pymc3.Uniform, variational inference
+:tags: generalized linear model, hierarchical model, pymc.Minibatch, pymc.Model, pymc.NUTS, pymc.Normal, pymc.Uniform, variational inference
 :category: intermediate
 :::
 
